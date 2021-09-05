@@ -1,0 +1,186 @@
+npm i -g create-react-app
+
+create-react-app search
+
+
+(npm i -g yarn)
+(cd search)
+yarn start
+
+src -> app.js : 내용출력
+----------------
+
+component : 구성요소 : 웹문서에서 어떠한 내용을 보옂기위한 기본적인 단위
+
+app.js 컴포넌트가 
+public > index.html에서 root에서 그려짐
+
+계층적으로 구성가능해서 
+하나의 App안에 여러 컴포넌트 만들 수 있어
+
+-------------------
+
+소스파일에 components파일 만들고 그 안에 Customer.js 만들어
+그 안에서 내용을 만들고 => export 출력
+
+import React from 'react'; //특정 리액트 라이브러리 불러올거야 
+
+class Customer extends React.Component{//리액트에 컴포넌트 형태로 작성된 클래스다.
+//라이브러리이자 클래스야
+    render(){
+        //항상 수행됨. Customer라는 컴포넌트를 실제 화면에 그리고자할때 그려지는 내용
+        return(
+            <div>
+            <h2>홍길동</h2>
+            <p>961111</p>
+            <p>남자</p>
+            <p>대학생</p>
+            </div>
+        )
+    }
+}
+export default Customer; //우리가 만든걸 다른 컴포넌트에서 사용하도록 내보내기
+ 
+-----
+app.js에서 그 컴포넌트 출력 
+
+function App() {
+  return (
+    <Customer/>//이 컴포넌트를 포함해서 화면에 출력해
+  );
+}
+
+----------------------
+
+이때 원래는 
+
+const customer = {
+    'name' : '홍길동',
+    'birth' : '961111',
+    'gender' : '남자',
+    'job' : '대학생'
+}
+
+function App() {
+  return (
+    <Customer
+	name = {}
+	birthday = {}
+	gender = {}
+	job = {}
+     />
+  );
+}
+
+그 다음 App에서 구성요소로 Customer를 나타내는거고?? 
+이런식으로 props로 데이터를 나타내줄거야
+
+★
+Customer.js 에서 App.js에서 보내준걸 this.props로 받아서 나타내주는거임!!! 
+
+App이 보내고 (여기서 데이터바꾸면 바뀜)
+Customer가 받은거야
+
+
+ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
+컴포넌트의 내용이 너무 많을때는 그럼 어떻게 해 ??
+
+컴포넌트의 내용을 분리하자!!!
+
+
+
+두 분류로 나눠서 
+class CustomerProfile
+class CustomerInfo
+
+class Customer
+여기에 집어넣어
+<div>
+                <CustomerProfile id={this.props.id} image={this.props.image} name={this.props.name}/>
+                <CustomerInfo birth={this.props.birth} gender={this.props.gender} job={this.props.job}  />
+</div>
+
+
+
+ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
+
+화면에 출력될 내용=요소를 반환하는 형태로 개발해야하는데
+
+jsx라는 문법으로 생성할 수 있어
+
+데이터 두개 이상일 경우 div로 감싸야해
+
+
+데이터 갯수를 늘리는건 App.js에 가서 늘려
+변수를 [ ] 배열형태로 만들어서 {} 각각의 데이터는 json형태
+
+ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
+
+데이터를 계속 늘려갈 수 없어 
+반복문이 필요해 => map 함수
+
+
+customers라는 데이터 담은 변수를
+
+customers.map ( c => { //각 원소를 c로 순회시켜
+key 뭐로 할지도 꼭 지정해줘! (프라이머리 키) 
+} 
+
+ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
+
+Material UI 
+
+npm install @material-ui/core
+
+아까 profile , info 나눴던거 지워버리고 table 표형식을 쓸거니까
+
+import TableRow from '@material-ui/core/TableRow'
+import TableCell from '@material-ui/core/TableCell' 일케ㅇㅇ
+
+------
+customer.js 에서 각각의 보여지는걸 작업했고 <- Tablebody에 해당하는 부분
+App.js 몸통부분에서 각각의 정보를 하나씩 출력하도록 처리할거야
+
+<table>
+<tablehead>
+부분은 이거이거로! 
+body는 아까 customer.js에서 불러오는 부분 넣고
+
+
+------
+이제 CSS!! 
+
+App.js에서 import { withStyles } from '@material-ui/core/styles'
+등등
+
+styles 정해주고!!!
+
+const styles = theme => ({ //styles라는 변수에 담아서 실행해!
+  root: { //root클래스 정의
+    width: '100%', //너비는 100퍼
+    marginTop: theme.spacing.unit * 3, //위쪽으로 여백(마진)을 3의 가중치만큼..?
+    overflowX: "auto", // root는 X축으로 오버플로우 발생하도록 처리
+  },
+  table: {
+    minWidth: 1080 //무조건 1080px이상 출력, 화면크기 줄어들어도 1080만큼은 테이블이니까 스크롤생길거야
+  }
+})
+
+-----
+class App extends Component {
+  render() {
+    const { classes } = this.props;
+    return (
+      <Paper className = {classes.root}> 
+        <Table className = {classes.table}> <<- 클래스네임 주고
+------
+export default withStyles(styles)(App); <<- 이렇게 바꾸고
+
+
+
+https://material-ui.com/components/tables/ 여기 참고하면 돼!!
+
+
+ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
+
+
